@@ -2,95 +2,236 @@
 <html>
 <head>
   <title>HM BD Earning</title>
-  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+    }
+
+    .menu {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      background: #111827;
+      padding: 10px;
+    }
+
+    button {
+      padding: 10px;
+      margin: 5px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .task {
+      background: #1e293b;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    textarea {
+      width: 90%;
+      height: 50px;
+      margin-top: 5px;
+    }
+  </style>
 </head>
 
 <body>
 
-  <!-- HOME -->
-  <div id="home">
-    <h2>🏠 Home</h2>
-    <p id="balanceText">💰 Balance: ৳0.00</p>
+<!-- HOME -->
+<div id="home">
+  <h2>🏠 Home</h2>
+  <p id="balanceText">💰 Balance: ৳0.00</p>
+  <button onclick="watchAd()">🎥 Watch Ad (+৳0.50)</button>
+</div>
 
-    <button onclick="watchAd()">🎥 Watch Ad (+৳0.50)</button>
+<!-- TASKS -->
+<div id="tasks" style="display:none;">
+  <h2>📋 Tasks</h2>
+
+  <div class="task">
+    <p>1️⃣ Telegram Channel (+৳2)</p>
+    <button onclick="window.open('https://t.me/colortrendingboss')">Join</button>
+    <input type="file" id="img1">
+    <button onclick="submitTask(2,'img1')">Submit</button>
   </div>
 
-  <!-- TASKS -->
-  <div id="tasks" style="display:none;">
-
-    <h2>📋 Tasks</h2>
-
-    <div class="task">
-      <p>1️⃣ Telegram Channel (+৳2)</p>
-      <button onclick="window.open('https://t.me/colortrendingboss')">Join</button>
-      <input type="file" id="img1">
-      <button onclick="submitTask(2,'img1')">Submit</button>
-    </div>
-
-    <div class="task">
-      <p>2️⃣ Telegram Group (+৳2)</p>
-      <button onclick="window.open('https://t.me/colortrending22')">Join</button>
-      <input type="file" id="img2">
-      <button onclick="submitTask(2,'img2')">Submit</button>
-    </div>
-
-    <div class="task">
-      <p>3️⃣ Register Site (+৳3)</p>
-      <button onclick="window.open('https://s.betfugu01.com/scabylqhmzvlt7ps')">Join</button>
-      <input type="file" id="img3">
-      <button onclick="submitTask(3,'img3')">Submit</button>
-    </div>
-
-    <div class="task">
-      <p>4️⃣ WhatsApp Bind (+৳20)</p>
-      <button onclick="window.open('https://shubho.top/#/register?code=115601')">Join</button>
-      <input type="file" id="img4">
-      <button onclick="submitTask(20,'img4')">Submit</button>
-    </div>
-
-    <div class="task">
-      <p>5️⃣ App Task (+৳10)</p>
-      <button onclick="window.open('https://is.liteearn.top/lien/s/s.html?u=3IPKC6K')">Join</button>
-      <input type="file" id="img5">
-      <button onclick="submitTask(10,'img5')">Submit</button>
-    </div>
-
-    <div class="task">
-      <p>6️⃣ Free Bet (+৳2)</p>
-      <button onclick="window.open('https://playtok.win/app_bd.html?userId=8459986&currency=BDT&from=earncash')">Join</button>
-      <input type="file" id="img6">
-      <button onclick="submitTask(2,'img6')">Submit</button>
-    </div>
-
-    <div class="task">
-      <p>7️⃣ WhatsApp 24h (+৳10)</p>
-      <button onclick="window.open('https://cashbazar.top/#/login?code=MQmRxi')">Join</button>
-      <input type="file" id="img7">
-      <button onclick="submitTask(10,'img7')">Submit</button>
-    </div>
-
+  <div class="task">
+    <p>2️⃣ Telegram Group (+৳2)</p>
+    <button onclick="window.open('https://t.me/colortrending22')">Join</button>
+    <input type="file" id="img2">
+    <button onclick="submitTask(2,'img2')">Submit</button>
   </div>
 
-  <!-- PACKAGES -->
-  <div id="packages" style="display:none;">
-    <h2>📦 Packages</h2>
-    <p>Coming soon...</p>
+  <div class="task">
+    <p>3️⃣ Register (+৳3)</p>
+    <button onclick="window.open('https://s.betfugu01.com/scabylqhmzvlt7ps')">Join</button>
+    <input type="file" id="img3">
+    <button onclick="submitTask(3,'img3')">Submit</button>
   </div>
 
-  <!-- MENU -->
-  <div id="menu" style="display:none;">
-    <h2>☰ Menu</h2>
-    <p>Settings</p>
+  <div class="task">
+    <p>4️⃣ WhatsApp Bind (+৳20)</p>
+    <button onclick="window.open('https://shubho.top/#/register?code=115601')">Join</button>
+    <input type="file" id="img4">
+    <button onclick="submitTask(20,'img4')">Submit</button>
   </div>
 
-  <!-- NAV BAR -->
-  <div class="menu">
-    <button onclick="showPage('home')">Home</button>
-    <button onclick="showPage('tasks')">Tasks</button>
-    <button onclick="showPage('packages')">Packages</button>
-    <button onclick="showPage('menu')">Menu</button>
+  <div class="task">
+    <p>5️⃣ App Task (+৳10)</p>
+    <button onclick="window.open('https://is.liteearn.top/lien/s/s.html?u=3IPKC6K')">Join</button>
+    <input type="file" id="img5">
+    <button onclick="submitTask(10,'img5')">Submit</button>
   </div>
 
-  <script src="app.js"></script>
+  <div class="task">
+    <p>6️⃣ Free Bet (+৳2)</p>
+    <button onclick="window.open('https://playtok.win/app_bd.html?userId=8459986')">Join</button>
+    <input type="file" id="img6">
+    <button onclick="submitTask(2,'img6')">Submit</button>
+  </div>
+
+  <div class="task">
+    <p>7️⃣ WhatsApp 24h (+৳10)</p>
+    <button onclick="window.open('https://cashbazar.top/#/login?code=MQmRxi')">Join</button>
+    <input type="file" id="img7">
+    <button onclick="submitTask(10,'img7')">Submit</button>
+  </div>
+</div>
+
+<!-- PACKAGES -->
+<div id="packages" style="display:none;">
+  <h2>📦 Packages</h2>
+</div>
+
+<!-- MENU -->
+<div id="menu" style="display:none;">
+  <h2>☰ Menu</h2>
+</div>
+
+<!-- ADMIN -->
+<div id="admin" style="display:none;">
+  <h2>🛠 Admin Panel</h2>
+  <div id="adminList"></div>
+</div>
+
+<!-- NAV -->
+<div class="menu">
+  <button onclick="showPage('home')">Home</button>
+  <button onclick="showPage('tasks')">Tasks</button>
+  <button onclick="showPage('packages')">Packages</button>
+  <button onclick="showPage('menu')">Menu</button>
+  <button onclick="showPage('admin')">Admin</button>
+</div>
+
+<script>
+let balance = 0;
+let pending = JSON.parse(localStorage.getItem("pending") || "[]");
+
+// page switch
+function showPage(page) {
+  let pages = ["home","tasks","packages","menu","admin"];
+
+  pages.forEach(p => {
+    document.getElementById(p).style.display = "none";
+  });
+
+  document.getElementById(page).style.display = "block";
+
+  if(page === "admin") loadAdmin();
+}
+
+// ads
+function watchAd() {
+  balance += 0.50;
+  update();
+}
+
+// submit task
+function submitTask(amount,id) {
+
+  let file = document.getElementById(id);
+
+  if(!file.files.length){
+    alert("Screenshot দিন");
+    return;
+  }
+
+  pending.push({
+    id: Date.now(),
+    amount: amount,
+    file: file.files[0].name
+  });
+
+  localStorage.setItem("pending", JSON.stringify(pending));
+
+  alert("Submitted (Pending Admin)");
+}
+
+// admin load
+function loadAdmin() {
+  let box = document.getElementById("adminList");
+  box.innerHTML = "";
+
+  pending.forEach(t => {
+
+    let div = document.createElement("div");
+    div.className = "task";
+
+    div.innerHTML = `
+      <p>💰 ৳${t.amount}</p>
+      <p>📸 ${t.file}</p>
+      <button onclick="approve(${t.id})">Approve</button>
+      <button onclick="reject(${t.id})">Reject</button>
+    `;
+
+    box.appendChild(div);
+  });
+}
+
+// approve
+function approve(id){
+  let t = pending.find(x => x.id === id);
+  balance += t.amount;
+  pending = pending.filter(x => x.id !== id);
+  save();
+  update();
+  loadAdmin();
+}
+
+// reject
+function reject(id){
+  pending = pending.filter(x => x.id !== id);
+  save();
+  loadAdmin();
+}
+
+// update balance
+function update(){
+  document.getElementById("balanceText").innerText =
+  "💰 Balance: ৳" + balance.toFixed(2);
+}
+
+// save
+function save(){
+  localStorage.setItem("pending", JSON.stringify(pending));
+}
+
+// start
+document.addEventListener("DOMContentLoaded", function(){
+  showPage("home");
+});
+</script>
+
 </body>
   </html>
