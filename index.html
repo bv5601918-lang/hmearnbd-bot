@@ -3,10 +3,41 @@
 <head>
   <title>HM BD Earning</title>
 
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body{
+      margin:0;
+      font-family:Arial;
+      background:#0f172a;
+      color:white;
+      text-align:center;
+    }
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    .menu{
+      position:fixed;
+      bottom:0;
+      width:100%;
+      display:flex;
+      justify-content:space-around;
+      background:#111827;
+      padding:10px;
+    }
+
+    button{
+      padding:10px;
+      margin:5px;
+      background:#2563eb;
+      color:white;
+      border:none;
+      border-radius:8px;
+    }
+
+    .task{
+      background:#1e293b;
+      margin:10px;
+      padding:10px;
+      border-radius:10px;
+    }
+  </style>
 </head>
 
 <body>
@@ -14,44 +45,116 @@
 <!-- HOME -->
 <div id="home">
   <h2>🏠 Home</h2>
-  <p id="balanceText">💰 Balance: ৳0.00</p>
-
-  <button onclick="watchAd()">🎥 Watch Ad (+৳0.50)</button>
+  <p id="balance">💰 Balance: ৳0</p>
 </div>
 
 <!-- TASKS -->
 <div id="tasks" style="display:none;">
   <h2>📋 Tasks</h2>
 
-  <input type="file" id="img1">
-  <button onclick="submitTask(2,'Task 1','img1')">Join Task 1 (+৳2)</button>
+  <div class="task">
+    <p>Join Telegram Channel (+৳2)</p>
+    <button onclick="openLink('https://t.me/colortrendingboss')">Join</button>
+    <input type="file" id="t1">
+    <button onclick="submitTask(2,'t1')">Submit</button>
+  </div>
+
+  <div class="task">
+    <p>Join Group (+৳2)</p>
+    <button onclick="openLink('https://t.me/colortrending22')">Join</button>
+    <input type="file" id="t2">
+    <button onclick="submitTask(2,'t2')">Submit</button>
+  </div>
+
+  <div class="task">
+    <p>Register (+৳3)</p>
+    <button onclick="openLink('https://s.betfugu01.com/scabylqhmzvlt7ps')">Join</button>
+    <input type="file" id="t3">
+    <button onclick="submitTask(3,'t3')">Submit</button>
+  </div>
+
+  <div class="task">
+    <p>WhatsApp Task (+৳20)</p>
+    <button onclick="openLink('https://shubho.top/#/register?code=115601')">Join</button>
+    <input type="file" id="t4">
+    <button onclick="submitTask(20,'t4')">Submit</button>
+  </div>
+
+  <div class="task">
+    <p>App Task (+৳10)</p>
+    <button onclick="openLink('https://is.liteearn.top/lien/s/s.html?u=3IPKC6K')">Join</button>
+    <input type="file" id="t5">
+    <button onclick="submitTask(10,'t5')">Submit</button>
+  </div>
+
 </div>
 
 <!-- REFERRAL -->
 <div id="referral" style="display:none;">
   <h2>🤝 Referral</h2>
   <p>Your Code:</p>
-  <h3 id="refCode"></h3>
-
-  <button onclick="copyRef()">Copy Link</button>
-
-  <p>Total Referrals: <span id="refCount">0</span></p>
+  <h3 id="refCode">HM123</h3>
 </div>
 
 <!-- ADMIN -->
 <div id="admin" style="display:none;">
-  <h2>🛠 Admin Panel</h2>
-  <div id="adminList"></div>
+  <h2>🛠 Admin</h2>
+  <p>Demo Admin Panel (No crash version)</p>
 </div>
 
 <!-- MENU -->
 <div class="menu">
-  <button onclick="showPage('home')">Home</button>
-  <button onclick="showPage('tasks')">Tasks</button>
-  <button onclick="showPage('referral')">Referral</button>
-  <button onclick="showPage('admin')">Admin</button>
+  <button onclick="show('home')">Home</button>
+  <button onclick="show('tasks')">Tasks</button>
+  <button onclick="show('referral')">Referral</button>
+  <button onclick="show('admin')">Admin</button>
 </div>
 
-<script src="app.js"></script>
+<script>
+
+let balance = 0;
+
+// PAGE SWITCH SAFE
+function show(page){
+  let pages=["home","tasks","referral","admin"];
+
+  pages.forEach(p=>{
+    let el=document.getElementById(p);
+    if(el) el.style.display="none";
+  });
+
+  document.getElementById(page).style.display="block";
+}
+
+// OPEN LINK SAFE
+function openLink(url){
+  window.open(url,"_blank");
+}
+
+// TASK SYSTEM (SAFE LOCAL ONLY)
+function submitTask(amount,id){
+
+  let file=document.getElementById(id);
+
+  if(!file || file.files.length===0){
+    alert("Screenshot দিন");
+    return;
+  }
+
+  balance += amount;
+
+  document.getElementById("balance").innerText =
+    "💰 Balance: ৳" + balance;
+
+  alert("Task Submitted +৳"+amount);
+}
+
+// START SAFE
+document.addEventListener("DOMContentLoaded",function(){
+  show("home");
+});
+
+</script>
+
 </body>
-</html>
+  </html>
