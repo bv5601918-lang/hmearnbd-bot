@@ -3,84 +3,38 @@
 <head>
   <title>HM BD Earning</title>
 
+  <link rel="stylesheet" href="style.css">
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    body{
-      margin:0;
-      font-family:Arial;
-      background:#0f172a;
-      color:white;
-      text-align:center;
-    }
-
-    .menu{
-      position:fixed;
-      bottom:0;
-      width:100%;
-      display:flex;
-      justify-content:space-around;
-      background:#111827;
-      padding:10px;
-    }
-
-    button{
-      padding:10px;
-      margin:5px;
-      background:#2563eb;
-      color:white;
-      border:none;
-      border-radius:8px;
-    }
-
-    .task{
-      background:#1e293b;
-      margin:10px;
-      padding:10px;
-      border-radius:10px;
-    }
-  </style>
 </head>
 
 <body>
 
-<!-- HOME -->
 <div id="home">
   <h2>🏠 Home</h2>
   <p id="balance">💰 Balance: ৳0</p>
 </div>
 
-<!-- TASKS -->
 <div id="tasks" style="display:none;">
   <h2>📋 Tasks</h2>
 
-  <div class="task">
-    <p>Join Telegram (+৳2)</p>
-    <input type="file" id="t1">
-    <button onclick="submitTask(2,'t1')">Submit</button>
-  </div>
+  <input type="file" id="t1">
+  <button onclick="submitTask(2,'t1')">Task 1 (+2)</button>
 
-  <div class="task">
-    <p>Join Group (+৳2)</p>
-    <input type="file" id="t2">
-    <button onclick="submitTask(2,'t2')">Submit</button>
-  </div>
+  <input type="file" id="t2">
+  <button onclick="submitTask(2,'t2')">Task 2 (+2)</button>
 </div>
 
-<!-- REFERRAL -->
 <div id="referral" style="display:none;">
   <h2>🤝 Referral</h2>
-  <p>Your Code:</p>
   <h3 id="refCode"></h3>
 </div>
 
-<!-- ADMIN -->
 <div id="admin" style="display:none;">
-  <h2>🛠 Admin Panel</h2>
+  <h2>🛠 Admin</h2>
   <div id="adminList"></div>
 </div>
 
-<!-- MENU -->
 <div class="menu">
   <button onclick="show('home')">Home</button>
   <button onclick="show('tasks')">Tasks</button>
@@ -88,141 +42,7 @@
   <button onclick="show('admin')">Admin</button>
 </div>
 
-<script>
-/* =======================
-   SUPABASE CONNECT
-======================= */
+<script src="app.js"></script>
 
-const SUPABASE_URL = "https://eljvjhuiogdjvcyxczug.supabase.co";
-const SUPABASE_KEY = "PASTE_YOUR_ANON_KEY_HERE";
-
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-let user = null;
-let balance = 0;
-
-/* =======================
-   INIT USER
-======================= */
-
-async function initUser(){
-
-  let uid = localStorage.getItem("uid");
-
-  if(!uid){
-    uid = "U" + Date.now();
-    localStorage.setItem("uid", uid);
-  }
-
-  let { data } = await supabase
-    .from("users")
-    .select("*")
-    .eq("telegram_id", uid)
-    .single();
-
-  if(!data){
-
-    let ref = "REF" + Math.floor(Math.random()*99999);
-
-    await supabase.from("users").insert([{
-      telegram_id: uid,
-      username: "User",
-      balance: 0,
-      referral_code: ref,
-      total_referrals: 0
-    }]);
-  }
-
-  loadUser();
-}
-
-/* =======================
-   LOAD USER
-======================= */
-
-async function loadUser(){
-
-  let uid = localStorage.getItem("uid");
-
-  let { data } = await supabase
-    .from("users")
-    .select("*")
-    .eq("telegram_id", uid)
-    .single();
-
-  user = data;
-  balance = data.balance;
-
-  document.getElementById("balance").innerText =
-    "💰 Balance: ৳" + balance;
-
-  document.getElementById("refCode").innerText =
-    data.referral_code;
-}
-
-/* =======================
-   TASK SUBMIT
-======================= */
-
-async function submitTask(amount,id){
-
-  let file = document.getElementById(id);
-
-  if(!file.files.length){
-    alert("Screenshot দিন");
-    return;
-  }
-
-  await supabase.from("task_submissions").insert([{
-    user_id: user.id,
-    task_name: "Task",
-    screenshot_url: file.files[0].name,
-    reward: amount,
-    status: "pending"
-  }]);
-
-  alert("Submitted → Admin Approval Pending");
-}
-
-/* =======================
-   ADMIN LOAD
-======================= */
-
-async function loadAdmin(){
-
-  let { data } = await supabase
-    .from("task_submissions")
-    .select("*")
-    .eq("status","pending");
-
-  let box = document.getElementById("adminList");
-  box.innerHTML = "";
-
-  data.forEach(t=>{
-
-    let div = document.createElement("div");
-    div.className="task";
-
-    div.innerHTML = `
-      <p>${t.task_name} - ৳${t.reward}</p>
-      <button onclick="approve('${t.id}',${t.reward})">Approve</button>
-    `;
-
-    box.appendChild(div);
-  });
-}
-
-/* =======================
-   APPROVE TASK
-======================= */
-
-async function approve(id, reward){
-
-  await supabase
-    .from("task_submissions")
-    .update({status:"approved"})
-    .eq("id",id);
-
-  balance += reward;
-
-  document.getElementById("balance").innerText
+</body>
+</html>
