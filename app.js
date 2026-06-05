@@ -6,7 +6,8 @@ function show(page){
     "packages",
     "menu",
     "deposit",
-    "withdraw"
+    "withdraw",
+    "referral"
   ];
 
   pages.forEach(p=>{
