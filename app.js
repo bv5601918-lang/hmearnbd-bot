@@ -1,172 +1,100 @@
-// 🔥 SUPABASE CONNECT
 const SUPABASE_URL = "https://eljvjhuiogdjvcyxczug.supabase.co";
-const SUPABASE_KEY = "YOUR_PUBLIC_KEY";
+const SUPABASE_KEY = "PASTE_YOUR_ANON_KEY";
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// =====================
-// USER SYSTEM
-// =====================
-
-let currentUser;
+let user;
 let balance = 0;
 
-// auto user create
-async function initUser() {
+/* INIT USER */
+async function initUser(){
 
-  let telegram_id = localStorage.getItem("uid");
+  let uid = localStorage.getItem("uid");
 
-  if(!telegram_id){
-    telegram_id = "U" + Date.now();
-    localStorage.setItem("uid", telegram_id);
+  if(!uid){
+    uid = "U"+Date.now();
+    localStorage.setItem("uid",uid);
   }
 
-  let { data } = await supabaseClient
+  let { data } = await supabase
     .from("users")
     .select("*")
-    .eq("telegram_id", telegram_id)
+    .eq("telegram_id",uid)
     .single();
 
   if(!data){
 
-    let refCode = "REF" + Math.floor(Math.random()*99999);
+    let ref = "REF"+Math.floor(Math.random()*99999);
 
-    await supabaseClient.from("users").insert([{
-      telegram_id,
-      username: "User",
-      balance: 0,
-      referral_code: refCode,
-      referred_by: null,
-      total_referrals: 0
+    await supabase.from("users").insert([{
+      telegram_id:uid,
+      username:"User",
+      balance:0,
+      referral_code:ref,
+      total_referrals:0
     }]);
-
   }
 
   loadUser();
 }
 
-// load user
+/* LOAD USER */
 async function loadUser(){
 
   let uid = localStorage.getItem("uid");
 
-  let { data } = await supabaseClient
+  let { data } = await supabase
     .from("users")
     .select("*")
-    .eq("telegram_id", uid)
+    .eq("telegram_id",uid)
     .single();
 
-  currentUser = data;
+  user = data;
   balance = data.balance;
 
-  document.getElementById("balanceText").innerText =
-    "💰 Balance: ৳" + balance;
+  document.getElementById("balance").innerText =
+    "💰 Balance: ৳"+balance;
+
+  document.getElementById("refCode").innerText =
+    data.referral_code;
 }
 
-// =====================
-// TASK SYSTEM
-// =====================
+/* TASK */
+async function submitTask(amount,id){
 
-async function submitTask(amount, taskName, inputId){
-
-  let file = document.getElementById(inputId);
+  let file = document.getElementById(id);
 
   if(!file.files.length){
-    alert("Upload screenshot");
+    alert("Screenshot দিন");
     return;
   }
 
-  await supabaseClient.from("task_submissions").insert([{
-    user_id: currentUser.id,
-    task_name: taskName,
-    screenshot_url: file.files[0].name,
-    reward: amount,
-    status: "pending"
+  await supabase.from("task_submissions").insert([{
+    user_id:user.id,
+    task_name:"Task",
+    screenshot_url:file.files[0].name,
+    reward:amount,
+    status:"pending"
   }]);
 
-  alert("Submitted for approval");
+  alert("Submitted");
 }
 
-// =====================
-// ADS
-// =====================
-
-async function watchAd(){
-  balance += 0.5;
-  updateBalance();
-}
-
-// =====================
-// UPDATE BALANCE
-// =====================
-
-async function updateBalance(){
-
-  let uid = localStorage.getItem("uid");
-
-  await supabaseClient
-    .from("users")
-    .update({ balance })
-    .eq("telegram_id", uid);
-
-  document.getElementById("balanceText").innerText =
-    "💰 Balance: ৳" + balance;
-}
-
-// =====================
-// REFERRAL
-// =====================
-
-function loadReferral(){
-
-  document.getElementById("refCode").innerText =
-    currentUser.referral_code;
-
-  document.getElementById("refCount").innerText =
-    currentUser.total_referrals;
-}
-
-function copyRef(){
-  let link = window.location.href + "?ref=" + currentUser.referral_code;
-  navigator.clipboard.writeText(link);
-  alert("Copied!");
-}
-
-// =====================
-// PAGE CONTROL
-// =====================
-
-function showPage(page){
-
-  ["home","tasks","referral","admin"].forEach(p=>{
-    let el = document.getElementById(p);
-    if(el) el.style.display="none";
-  });
-
-  document.getElementById(page).style.display="block";
-
-  if(page==="referral") loadReferral();
-  if(page==="admin") loadAdmin();
-}
-
-// =====================
-// ADMIN (SIMPLE)
-// =====================
-
+/* ADMIN */
 async function loadAdmin(){
 
-  let { data } = await supabaseClient
+  let { data } = await supabase
     .from("task_submissions")
     .select("*")
     .eq("status","pending");
 
   let box = document.getElementById("adminList");
-  box.innerHTML = "";
+  box.innerHTML="";
 
   data.forEach(t=>{
 
-    let div = document.createElement("div");
-    div.innerHTML = `
+    let div=document.createElement("div");
+    div.innerHTML=`
       <p>${t.task_name} - ৳${t.reward}</p>
       <button onclick="approve('${t.id}',${t.reward})">Approve</button>
     `;
@@ -175,25 +103,35 @@ async function loadAdmin(){
   });
 }
 
-// approve
 async function approve(id, reward){
 
-  await supabaseClient
+  await supabase
     .from("task_submissions")
     .update({status:"approved"})
-    .eq("id", id);
+    .eq("id",id);
 
   balance += reward;
-  updateBalance();
+
+  document.getElementById("balance").innerText =
+    "💰 Balance: ৳"+balance;
 
   alert("Approved");
 }
 
-// =====================
-// START
-// =====================
+/* PAGE SWITCH */
+function show(page){
 
+  ["home","tasks","referral","admin"].forEach(p=>{
+    document.getElementById(p).style.display="none";
+  });
+
+  document.getElementById(page).style.display="block";
+
+  if(page==="admin") loadAdmin();
+}
+
+/* START */
 document.addEventListener("DOMContentLoaded",()=>{
   initUser();
-  showPage("home");
+  show("home");
 });
