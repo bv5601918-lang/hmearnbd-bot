@@ -1,103 +1,199 @@
+// 🔥 SUPABASE CONNECT
+const SUPABASE_URL = "https://eljvjhuiogdjvcyxczug.supabase.co";
+const SUPABASE_KEY = "YOUR_PUBLIC_KEY";
+
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// =====================
+// USER SYSTEM
+// =====================
+
+let currentUser;
 let balance = 0;
 
-// fake database (local storage use)
-let pendingTasks = JSON.parse(localStorage.getItem("pendingTasks") || "[]");
+// auto user create
+async function initUser() {
 
-// page switch
-function showPage(page) {
-  let pages = ["home", "tasks", "packages", "menu", "admin"];
+  let telegram_id = localStorage.getItem("uid");
 
-  pages.forEach(p => {
-    let el = document.getElementById(p);
-    if (el) el.style.display = "none";
-  });
+  if(!telegram_id){
+    telegram_id = "U" + Date.now();
+    localStorage.setItem("uid", telegram_id);
+  }
 
-  document.getElementById(page).style.display = "block";
+  let { data } = await supabaseClient
+    .from("users")
+    .select("*")
+    .eq("telegram_id", telegram_id)
+    .single();
 
-  if (page === "admin") loadAdmin();
+  if(!data){
+
+    let refCode = "REF" + Math.floor(Math.random()*99999);
+
+    await supabaseClient.from("users").insert([{
+      telegram_id,
+      username: "User",
+      balance: 0,
+      referral_code: refCode,
+      referred_by: null,
+      total_referrals: 0
+    }]);
+
+  }
+
+  loadUser();
 }
 
-// ads
-function watchAd() {
-  balance += 0.50;
-  updateBalance();
+// load user
+async function loadUser(){
+
+  let uid = localStorage.getItem("uid");
+
+  let { data } = await supabaseClient
+    .from("users")
+    .select("*")
+    .eq("telegram_id", uid)
+    .single();
+
+  currentUser = data;
+  balance = data.balance;
+
+  document.getElementById("balanceText").innerText =
+    "💰 Balance: ৳" + balance;
 }
 
-// submit task -> goes to admin approval
-function submitTask(amount, inputId) {
+// =====================
+// TASK SYSTEM
+// =====================
+
+async function submitTask(amount, taskName, inputId){
+
   let file = document.getElementById(inputId);
 
-  if (!file || file.files.length === 0) {
-    alert("Screenshot দিন");
+  if(!file.files.length){
+    alert("Upload screenshot");
     return;
   }
 
-  let task = {
-    id: Date.now(),
-    amount: amount,
-    proof: file.files[0].name,
+  await supabaseClient.from("task_submissions").insert([{
+    user_id: currentUser.id,
+    task_name: taskName,
+    screenshot_url: file.files[0].name,
+    reward: amount,
     status: "pending"
-  };
+  }]);
 
-  pendingTasks.push(task);
-  localStorage.setItem("pendingTasks", JSON.stringify(pendingTasks));
-
-  alert("Task submitted (Pending approval)");
+  alert("Submitted for approval");
 }
 
-// ADMIN PANEL LOAD
-function loadAdmin() {
-  let adminDiv = document.getElementById("adminList");
-  adminDiv.innerHTML = "";
+// =====================
+// ADS
+// =====================
 
-  pendingTasks.forEach(task => {
+async function watchAd(){
+  balance += 0.5;
+  updateBalance();
+}
+
+// =====================
+// UPDATE BALANCE
+// =====================
+
+async function updateBalance(){
+
+  let uid = localStorage.getItem("uid");
+
+  await supabaseClient
+    .from("users")
+    .update({ balance })
+    .eq("telegram_id", uid);
+
+  document.getElementById("balanceText").innerText =
+    "💰 Balance: ৳" + balance;
+}
+
+// =====================
+// REFERRAL
+// =====================
+
+function loadReferral(){
+
+  document.getElementById("refCode").innerText =
+    currentUser.referral_code;
+
+  document.getElementById("refCount").innerText =
+    currentUser.total_referrals;
+}
+
+function copyRef(){
+  let link = window.location.href + "?ref=" + currentUser.referral_code;
+  navigator.clipboard.writeText(link);
+  alert("Copied!");
+}
+
+// =====================
+// PAGE CONTROL
+// =====================
+
+function showPage(page){
+
+  ["home","tasks","referral","admin"].forEach(p=>{
+    let el = document.getElementById(p);
+    if(el) el.style.display="none";
+  });
+
+  document.getElementById(page).style.display="block";
+
+  if(page==="referral") loadReferral();
+  if(page==="admin") loadAdmin();
+}
+
+// =====================
+// ADMIN (SIMPLE)
+// =====================
+
+async function loadAdmin(){
+
+  let { data } = await supabaseClient
+    .from("task_submissions")
+    .select("*")
+    .eq("status","pending");
+
+  let box = document.getElementById("adminList");
+  box.innerHTML = "";
+
+  data.forEach(t=>{
+
     let div = document.createElement("div");
-    div.className = "task";
-
     div.innerHTML = `
-      <p>💰 Amount: ৳${task.amount}</p>
-      <p>📸 Proof: ${task.proof}</p>
-
-      <button onclick="approveTask(${task.id})">Approve</button>
-      <button onclick="rejectTask(${task.id})">Reject</button>
+      <p>${t.task_name} - ৳${t.reward}</p>
+      <button onclick="approve('${t.id}',${t.reward})">Approve</button>
     `;
 
-    adminDiv.appendChild(div);
+    box.appendChild(div);
   });
 }
 
 // approve
-function approveTask(id) {
-  let task = pendingTasks.find(t => t.id === id);
+async function approve(id, reward){
 
-  if (task) {
-    balance += task.amount;
-    pendingTasks = pendingTasks.filter(t => t.id !== id);
+  await supabaseClient
+    .from("task_submissions")
+    .update({status:"approved"})
+    .eq("id", id);
 
-    save();
-    updateBalance();
-    loadAdmin();
-  }
+  balance += reward;
+  updateBalance();
+
+  alert("Approved");
 }
 
-// reject
-function rejectTask(id) {
-  pendingTasks = pendingTasks.filter(t => t.id !== id);
-  save();
-  loadAdmin();
-}
+// =====================
+// START
+// =====================
 
-// helpers
-function updateBalance() {
-  document.getElementById("balanceText").innerText =
-    "💰 Balance: ৳" + balance.toFixed(2);
-}
-
-function save() {
-  localStorage.setItem("pendingTasks", JSON.stringify(pendingTasks));
-}
-
-// default page
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded",()=>{
+  initUser();
   showPage("home");
 });
