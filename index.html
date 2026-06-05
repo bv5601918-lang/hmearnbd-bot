@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>HM BD Earning</title>
+  <title>Mini App</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -11,34 +11,50 @@
 <div id="home" class="page">
   <h2>🏠 Home</h2>
 
-  <p>👤 User: Demo User</p>
+  <p>👤 User: Demo</p>
   <p>💰 Balance: ৳0</p>
 
   <div class="box">
     <button onclick="show('deposit')">Deposit</button>
     <button onclick="show('withdraw')">Withdraw</button>
-    <button onclick="show('referral')">Referral</button>
-    <button onclick="show('packages')">Packages</button>
   </div>
+</div>
+
+<!-- TASKS -->
+<div id="tasks" class="page" style="display:none;">
+  <h2>📋 Tasks</h2>
+  <p>All tasks will appear here</p>
+</div>
+
+<!-- PACKAGES -->
+<div id="packages" class="page" style="display:none;">
+  <h2>📦 Packages</h2>
+  <p>Packages will appear here</p>
+</div>
+
+<!-- MAIN MENU -->
+<div id="menu" class="page" style="display:none;">
+  <h2>☰ Main Menu</h2>
+  <p>User Settings / Info</p>
 </div>
 
 <!-- DEPOSIT -->
 <div id="deposit" class="page" style="display:none;">
   <h2>💳 Deposit</h2>
 
-  <p>📱 Send Money: 01793075384 (bKash/Nagad)</p>
+  <p>Send Money: 01793075384</p>
 
-  <input placeholder="Amount লিখুন">
+  <input placeholder="Amount">
   <input placeholder="Transaction ID">
 
-  <button>Screenshot Submit</button>
+  <button>Submit Deposit</button>
 </div>
 
 <!-- WITHDRAW -->
 <div id="withdraw" class="page" style="display:none;">
   <h2>💸 Withdraw</h2>
 
-  <p>Minimum Withdraw: ৳110</p>
+  <p>Minimum: ৳110</p>
 
   <select>
     <option>bKash</option>
@@ -48,76 +64,15 @@
   <input placeholder="Number">
   <input placeholder="Amount">
 
-  <button>Withdraw Request</button>
+  <button>Request Withdraw</button>
 </div>
 
-<!-- REFERRAL -->
-<div id="referral" class="page" style="display:none;">
-  <h2>🤝 Referral</h2>
-
-  <p>Invite 1 friend = ৳10</p>
-  <p>25 referrals = ৳500 salary</p>
-
-  <h3>Your Code: REF12345</h3>
-</div>
-
-<!-- PACKAGES -->
-<div id="packages" class="page" style="display:none;">
-  <h2>📦 Packages</h2>
-
-  <div class="card">
-    <p>Package 1 - ৳250 | 7 Days | ৳110/day</p>
-    <button>Buy</button>
-  </div>
-
-  <div class="card">
-    <p>Package 2 - ৳510 | 7 Days | ৳210/day</p>
-    <button>Buy</button>
-  </div>
-
-  <div class="card">
-    <p>Package 3 - ৳1000 | 7 Days | ৳400/day</p>
-    <button>Buy</button>
-  </div>
-
-  <div class="card">
-    <p>Package 4 - ৳2000 | 7 Days | ৳850/day</p>
-    <button>Buy</button>
-  </div>
-</div>
-
-<!-- TASKS -->
-<div id="tasks" class="page" style="display:none;">
-  <h2>📋 Tasks</h2>
-
-  <div class="card">
-    <p>Join Telegram</p>
-    <button>Join</button>
-  </div>
-
-  <div class="card">
-    <p>Create Account</p>
-    <button>Join</button>
-  </div>
-
-  <div class="card">
-    <p>Complete Offer</p>
-    <button>Join</button>
-  </div>
-
-  <div class="card">
-    <p>More Tasks...</p>
-    <button>Join</button>
-  </div>
-</div>
-
-<!-- MENU -->
+<!-- BOTTOM NAV (ONLY 4 BUTTONS) -->
 <div class="menu">
   <button onclick="show('home')">Home</button>
   <button onclick="show('tasks')">Tasks</button>
   <button onclick="show('packages')">Packages</button>
-  <button onclick="show('referral')">Referral</button>
-  <button onclick="show('withdraw')">Withdraw</button>
+  <button onclick="show('menu')">Main Menu</button>
 </div>
 
 <script src="app.js"></script>
