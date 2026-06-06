@@ -1,36 +1,22 @@
 body{
-    background:black;
-    color:#00ff00;
-    font-family: monospace;
-    text-align:center;
-}
-
-#login{
-    margin-top:100px;
-}
-
-input{
-    padding:10px;
-    background:black;
-    border:1px solid #00ff00;
-    color:#00ff00;
-}
-
-button{
-    padding:10px 20px;
-    margin-top:10px;
-    background:#00ff00;
-    border:none;
-    cursor:pointer;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background:#111;
+    font-family: Arial;
 }
 
 #box{
     width:200px;
     height:200px;
-    border:2px solid #00ff00;
-    margin:20px auto;
+    background:#00ff88;
+    color:black;
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
+    font-size:40px;
+    font-weight:bold;
+    border-radius:10px;
     transition:0.5s;
-  }
+}
