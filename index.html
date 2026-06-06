@@ -3,24 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI SYSTEM</title>
+<title>MEHEDI BOSS AI SYSTEM PRO</title>
 
 <style>
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
     font-family:Arial;
-    background:linear-gradient(135deg,#000814,#001d3d);
+    background: radial-gradient(circle at top,#001219,#000,#000814);
     color:white;
+    overflow:hidden;
+}
+
+/* SCAN EFFECT */
+body::before{
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:linear-gradient(180deg,transparent,rgba(0,255,200,0.05),transparent);
+    animation:scan 3s linear infinite;
+    pointer-events:none;
+}
+
+@keyframes scan{
+    0%{transform:translateY(-100%)}
+    100%{transform:translateY(100%)}
 }
 
 /* LOGIN */
 #loginBox{
     height:100vh;
-    width:100%;
     display:flex;
     flex-direction:column;
     justify-content:center;
@@ -28,10 +42,20 @@ body{
     gap:15px;
 }
 
-#loginBox h2{
-    color:#ffd60a;
-    font-size:28px;
-    letter-spacing:2px;
+#mainTitle{
+    font-size:30px;
+    font-weight:900;
+    text-align:center;
+    background:linear-gradient(90deg,#00f5d4,#fee440,#f15bb5,#00bbf9,#00f5d4);
+    background-size:400% 400%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:glow 3s linear infinite;
+}
+
+@keyframes glow{
+    0%{background-position:0% 50%}
+    100%{background-position:100% 50%}
 }
 
 input{
@@ -41,8 +65,6 @@ input{
     border:none;
     border-radius:12px;
     text-align:center;
-    font-size:16px;
-    outline:none;
 }
 
 button{
@@ -51,87 +73,76 @@ button{
     padding:15px;
     border:none;
     border-radius:12px;
-    font-size:16px;
     font-weight:bold;
     cursor:pointer;
-}
-
-/* LOGIN BUTTON COLOR */
-#loginBtn{
     background:linear-gradient(90deg,#00b4d8,#0077b6);
     color:white;
 }
 
-/* ERROR MESSAGE */
+/* MESSAGE */
 #message{
-    margin-top:10px;
-    color:#ff4d6d;
+    font-weight:bold;
+    text-align:center;
 }
 
 /* APP */
 #app{
     display:none;
-    min-height:100vh;
     text-align:center;
     padding:20px;
 }
 
-/* TITLE */
-h1{
-    color:#00b4d8;
-    letter-spacing:3px;
-    font-size:26px;
+/* DEV TEXT */
+#devText{
+    font-size:24px;
+    font-weight:900;
+    background:linear-gradient(90deg,#00f5d4,#fee440,#f15bb5,#00bbf9,#00f5d4);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:glow 2s linear infinite;
 }
 
 /* BIG SMALL */
 #result{
-    font-size:120px;
-    font-weight:bold;
-    margin-top:40px;
-    color:#ffd60a;
-    text-shadow:0 0 20px #00b4d8;
-    animation:glow 1s infinite alternate;
+    font-size:130px;
+    font-weight:900;
+    margin-top:20px;
+    background:linear-gradient(90deg,#00f5d4,#fee440,#f15bb5,#00bbf9,#00f5d4);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:shake 0.8s infinite alternate;
 }
 
-@keyframes glow{
-    from{transform:scale(0.95);opacity:0.6;}
-    to{transform:scale(1.05);opacity:1;}
+@keyframes shake{
+    from{transform:scale(0.95) rotate(-1deg)}
+    to{transform:scale(1.05) rotate(1deg)}
 }
 
 /* TIMER */
 #timer{
-    font-size:55px;
-    margin-top:10px;
-    color:#00b4d8;
+    font-size:60px;
+    font-weight:900;
+    color:#fee440;
 }
 
-/* BUTTON BAR */
-.tabs{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    display:flex;
-}
-
-.tabs button{
-    flex:1;
-    padding:18px;
-    border:none;
+/* LIVE */
+#liveText{
     font-size:16px;
-    font-weight:bold;
+    color:#00f5d4;
 }
 
-/* AI BUTTON */
-#aiBtn{
-    background:#0077b6;
-    color:white;
-}
-
-/* GAME BUTTON */
-#gameBtn{
-    background:#ffd60a;
-    color:#000;
+/* TERMINAL LOGS */
+#logs{
+    margin-top:20px;
+    height:120px;
+    overflow:hidden;
+    font-size:12px;
+    color:#00ff99;
+    text-align:left;
+    padding:10px;
+    border:1px solid #00ff99;
+    border-radius:10px;
+    animation:glow 3s linear infinite;
 }
 </style>
 </head>
@@ -140,100 +151,134 @@ h1{
 
 <!-- LOGIN -->
 <div id="loginBox">
-    <h2>AI SYSTEM LOGIN</h2>
+
+    <div id="mainTitle">MEHEDI BOSS AI SYSTEM PRO</div>
 
     <input id="password" type="password" placeholder="Enter Password">
 
-    <button id="loginBtn" onclick="login()">LOGIN</button>
+    <button onclick="login()">LOGIN</button>
 
     <div id="message"></div>
+
 </div>
 
 <!-- APP -->
 <div id="app">
 
-    <h1>AI SYSTEM DASHBOARD</h1>
+    <div id="devText">🔥 MEHEDI VAI AI SYSTEM DEVELOPER 🔥</div>
 
     <div id="result">---</div>
 
     <div id="timer">30</div>
 
-    <p>REAL TIME SIMULATION</p>
+    <div id="liveText">⚡ REAL TIME LIVE ⚡</div>
 
-    <div class="tabs">
-        <button id="aiBtn" onclick="openAI()">AI</button>
-        <button id="gameBtn" onclick="openGame()">GAME</button>
-    </div>
+    <!-- TERMINAL LOG -->
+    <div id="logs"></div>
 
 </div>
 
 <script>
-const PASSWORD = "MEHEDIVAI115";
 
+const PASSWORD = "MEHEDIVAI115";
 let countdown = 30;
 let started = false;
 
-/* LOGIN FIXED */
+/* TERMINAL LOGS */
+const logs = [
+"System booting...",
+"Connecting server...",
+"Security scan running...",
+"AI module loading...",
+"Network stable...",
+"Data sync active...",
+"Encryption enabled..."
+];
+
+function startLogs(){
+    let i = 0;
+    setInterval(()=>{
+        let box = document.getElementById("logs");
+        box.innerText = logs[i % logs.length];
+        i++;
+    },1200);
+}
+
+/* LOGIN */
 function login(){
 
-    const pass = document.getElementById("password").value;
-    const msg = document.getElementById("message");
+    let pass = document.getElementById("password").value;
+    let msg = document.getElementById("message");
 
     if(pass === PASSWORD){
 
-        msg.style.color = "#00ff88";
-        msg.innerText = "LOGIN SUCCESS";
-
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("app").style.display = "block";
+        document.getElementById("loginBox").style.display="none";
+        document.getElementById("app").style.display="block";
 
         if(!started){
-            started = true;
+            started=true;
             startSystem();
+            startLogs();
         }
 
     }else{
-        msg.innerText = "WRONG PASSWORD";
+
+        msg.style.color="#ff4d6d";
+        msg.innerText="❌ Wrong Password! Contact Admin for access";
+
+        playAlarm(); // SOUND
     }
+}
+
+/* ALARM SOUND (BEEP + SIREN FEEL) */
+function playAlarm(){
+    let ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+    let o = ctx.createOscillator();
+    let g = ctx.createGain();
+
+    o.type = "sawtooth";
+    o.frequency.value = 600;
+
+    o.connect(g);
+    g.connect(ctx.destination);
+
+    o.start();
+
+    setTimeout(()=>o.frequency.value = 900,300);
+    setTimeout(()=>o.frequency.value = 500,600);
+
+    setTimeout(()=>{
+        o.stop();
+        ctx.close();
+    },900);
 }
 
 /* RANDOM */
 function randomResult(){
-    return Math.random() < 0.5 ? "BIG" : "SMALL";
+    return Math.random()<0.5?"BIG":"SMALL";
 }
 
 /* SYSTEM */
 function startSystem(){
 
-    document.getElementById("result").innerText = randomResult();
+    document.getElementById("result").innerText=randomResult();
 
     setInterval(()=>{
 
         countdown--;
 
-        document.getElementById("timer").innerText = countdown;
+        document.getElementById("timer").innerText=countdown;
 
-        if(countdown <= 0){
-            countdown = 30;
-            document.getElementById("result").innerText = randomResult();
+        if(countdown<=0){
+            countdown=30;
+            document.getElementById("result").innerText=randomResult();
         }
 
     },1000);
 }
 
-/* AI */
-function openAI(){
-    window.scrollTo({top:0,behavior:"smooth"});
-}
-
-/* GAME */
-function openGame(){
-    window.open(
-        "https://hgnice.bet/#/register?invitationCode=531211974484",
-        "_blank"
-    );
-}
 </script>
 
 </body>
-  </html>
+</html>
