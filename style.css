@@ -1,0 +1,48 @@
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0a0a0a;
+    color:white;
+    text-align:center;
+}
+
+#loginBox{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+input{
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    width:200px;
+    text-align:center;
+}
+
+button{
+    margin-top:10px;
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#00ff88;
+}
+
+#app{
+    display:none;
+    padding-top:80px;
+}
+
+#value{
+    font-size:80px;
+    margin-top:40px;
+    text-shadow:0 0 15px #00ff88;
+}
+
+.btn{
+    margin-top:40px;
+    background:#0066ff;
+}
