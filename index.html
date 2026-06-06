@@ -1,15 +1,20 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Demo Dashboard</title><style>
+<title>AI SYSTEM DASHBOARD</title>
+
+<style>
 body{
     margin:0;
-    background:#0b0b0b;
-    color:#fff;
-    font-family:Arial,sans-serif;
+    font-family:Arial;
+    background: radial-gradient(circle,#0f0f0f,#000);
+    color:white;
+    text-align:center;
 }
 
+/* LOGIN */
 #loginBox{
     height:100vh;
     display:flex;
@@ -19,147 +24,177 @@ body{
     gap:10px;
 }
 
-#app{
-    display:none;
-    min-height:100vh;
-    text-align:center;
-    padding:20px;
-}
-
 input{
     padding:12px;
-    width:240px;
+    width:250px;
     border:none;
-    border-radius:8px;
+    border-radius:10px;
+    text-align:center;
+    outline:none;
 }
 
 button{
-    padding:12px 20px;
+    padding:12px 25px;
     border:none;
-    border-radius:8px;
+    border-radius:10px;
+    background:#00ff88;
     cursor:pointer;
-}
-
-#result{
-    font-size:60px;
     font-weight:bold;
-    margin-top:30px;
 }
 
+/* HEADER */
+h1{
+    margin-top:20px;
+    letter-spacing:3px;
+    color:#00ffcc;
+}
+
+/* APP */
+#app{
+    display:none;
+    padding-top:30px;
+}
+
+/* BIG SMALL */
+#result{
+    font-size:110px;
+    font-weight:bold;
+    margin-top:40px;
+    text-shadow:0 0 25px #00ff88;
+    animation: glow 1s infinite alternate;
+}
+
+@keyframes glow{
+    from{transform:scale(0.95);opacity:0.5;}
+    to{transform:scale(1.05);opacity:1;}
+}
+
+/* TIMER */
 #timer{
-    font-size:40px;
-    margin-top:15px;
+    font-size:50px;
+    margin-top:10px;
+    color:#00ffcc;
 }
 
+/* BUTTONS */
 .tabs{
     position:fixed;
+    bottom:0;
     left:0;
     right:0;
-    bottom:0;
     display:flex;
 }
 
 .tabs button{
     flex:1;
     border-radius:0;
+    font-size:16px;
 }
 
 #message{
-    margin-top:10px;
+    color:#ff4444;
 }
-</style></head><body><div id="loginBox">
-    <h2>LOGIN</h2><input id="password" type="password" placeholder="Password">
+</style>
+</head>
 
-<button onclick="login()">LOGIN</button>
+<body>
 
-<div id="message"></div>
+<!-- LOGIN -->
+<div id="loginBox">
+    <h2>LOGIN</h2>
 
-</div><div id="app"><h2>DEMO DASHBOARD</h2>
+    <input id="password" type="password" placeholder="Enter Password">
 
-<div id="result">BIG</div>
+    <button onclick="login()">LOGIN</button>
 
-<div id="timer">30</div>
-
-<p>Random Demo Simulation</p>
-
-<div class="tabs">
-    <button onclick="showAI()">AI</button>
-
-    <button onclick="openGame()">GAME</button>
+    <div id="message"></div>
 </div>
 
-</div><script>
+<!-- APP -->
+<div id="app">
+
+    <h1>AI SYSTEM</h1>
+
+    <div id="result">---</div>
+
+    <div id="timer">30</div>
+
+    <p>RANDOM SIMULATION ENGINE</p>
+
+    <div class="tabs">
+        <button onclick="openAI()">AI</button>
+        <button onclick="openGame()">GAME</button>
+    </div>
+
+</div>
+
+<script>
 const PASSWORD = "MEHEDIVAI115";
 
 let countdown = 30;
+let started = false;
 
+/* LOGIN FIXED */
 function login(){
 
-    const value =
-        document.getElementById("password").value;
+    const pass = document.getElementById("password").value;
+    const msg = document.getElementById("message");
 
-    const message =
-        document.getElementById("message");
+    if(pass === PASSWORD){
 
-    if(value === PASSWORD){
+        msg.style.color = "#00ff88";
+        msg.innerText = "LOGIN SUCCESS";
 
-        message.innerText = "সঠিক পাসওয়ার্ড";
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("app").style.display = "block";
 
-        document.getElementById("loginBox").style.display="none";
-        document.getElementById("app").style.display="block";
-
-        startDemo();
+        if(!started){
+            started = true;
+            startSystem();
+        }
 
     }else{
-
-        message.innerText = "পাসওয়ার্ড ভুল মামা";
+        msg.innerText = "WRONG PASSWORD";
     }
 }
 
-function randomResult(){
-
-    return Math.random() < 0.5
-        ? "BIG"
-        : "SMALL";
+/* RANDOM BIG SMALL */
+function getRandom(){
+    return Math.random() < 0.5 ? "BIG" : "SMALL";
 }
 
-function startDemo(){
+/* MAIN SYSTEM */
+function startSystem(){
 
-    document.getElementById("result").innerText =
-        randomResult();
+    document.getElementById("result").innerText = getRandom();
 
     setInterval(()=>{
 
         countdown--;
 
-        document.getElementById("timer").innerText =
-            countdown;
+        document.getElementById("timer").innerText = countdown;
 
         if(countdown <= 0){
-
             countdown = 30;
-
-            document.getElementById("result").innerText =
-                randomResult();
+            document.getElementById("result").innerText = getRandom();
         }
 
     },1000);
 }
 
-function showAI(){
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+/* AI BUTTON */
+function openAI(){
+    window.scrollTo({top:0,behavior:"smooth"});
 }
 
+/* GAME BUTTON */
 function openGame(){
-
     window.open(
         "https://hgnice.bet/#/register?invitationCode=531211974484",
         "_blank"
     );
 }
-</script></body>
-                      </html>
+</script>
+
+</body>
+</html>
