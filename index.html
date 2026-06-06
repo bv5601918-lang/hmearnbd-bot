@@ -16,6 +16,18 @@ body{
     overflow:hidden;
 }
 
+/* RED FLASH SCREEN */
+.flash{
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background:red;
+    opacity:0;
+    pointer-events:none;
+    animation:none;
+}
+
 /* LOGIN */
 #loginBox{
     height:100vh;
@@ -26,9 +38,10 @@ body{
     gap:15px;
 }
 
-#mainTitle{
+#title{
     font-size:28px;
     font-weight:900;
+    text-align:center;
     background:linear-gradient(90deg,#00f5d4,#fee440,#f15bb5,#00bbf9,#00f5d4);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
@@ -38,9 +51,9 @@ input{
     width:80%;
     max-width:320px;
     padding:15px;
-    text-align:center;
-    border-radius:10px;
     border:none;
+    border-radius:10px;
+    text-align:center;
 }
 
 button{
@@ -54,13 +67,6 @@ button{
     font-weight:bold;
 }
 
-/* ERROR */
-#message{
-    text-align:center;
-    font-weight:bold;
-    color:#ff4d6d;
-}
-
 /* APP */
 #app{
     display:none;
@@ -68,71 +74,71 @@ button{
     padding:20px;
 }
 
-/* HEADER TEXT */
+/* HEADER */
 #devText{
-    font-size:22px;
+    font-size:20px;
     font-weight:900;
     margin-top:10px;
+    animation:glow 2s linear infinite;
+}
+
+@keyframes glow{
+    0%{opacity:1}
+    50%{opacity:0.4}
+    100%{opacity:1}
 }
 
 /* BIG SMALL */
 #result{
-    font-size:120px;
+    font-size:110px;
     font-weight:900;
 }
 
 /* TIMER */
 #timer{
-    font-size:60px;
+    font-size:55px;
     color:#ffd60a;
     font-weight:900;
 }
 
-/* LIVE TEXT */
-#animatedLine{
-    margin-top:15px;
-    font-weight:bold;
-    transition:0.3s;
-}
-
-/* LOGS */
+/* LOG BOX */
 #logs{
     margin-top:20px;
     height:120px;
-    overflow:hidden;
-    font-size:12px;
-    color:#00ff99;
     border:1px solid #00ff99;
     padding:10px;
+    font-size:12px;
+    color:#00ff99;
+    overflow:hidden;
 }
 </style>
 </head>
 
 <body>
 
+<div class="flash" id="flash"></div>
+
 <!-- LOGIN -->
 <div id="loginBox">
 
-    <div id="mainTitle">MEHEDI BOSS AI SYSTEM PRO</div>
+    <div id="title">MEHEDI BOSS AI SYSTEM PRO</div>
 
     <input id="password" type="password" placeholder="Enter Password">
 
     <button onclick="login()">LOGIN</button>
 
-    <div id="message"></div>
+    <div id="msg"></div>
 
 </div>
 
 <!-- APP -->
 <div id="app">
 
-    <div id="devText">🔥 MEHEDI VAI BEST DEVELOPER BANGLADESH NO.1 🔥</div>
+    <div id="devText">MEHEDI VAI TOP COMMUNITY BIG BOSS NO.1 DEVELOPER BANGLADESH</div>
 
     <div id="result">---</div>
 
     <div id="timer">30</div>
-
-    <div id="animatedLine"></div>
 
     <div id="logs"></div>
 
@@ -140,138 +146,137 @@ button{
 
 <script>
 
-const PASSWORD = "MEHEDIVAI115";
-
-let countdown = 30;
-let started = false;
-let alarmInterval;
+const PASSWORD="MEHEDIVAI115";
+let countdown=30;
+let started=false;
+let alarmInt;
 
 /* LOGIN */
 function login(){
 
-    let pass = document.getElementById("password").value;
-    let msg = document.getElementById("message");
+    let pass=document.getElementById("password").value;
+    let msg=document.getElementById("msg");
 
-    if(pass === PASSWORD){
+    if(pass===PASSWORD){
 
         document.getElementById("loginBox").style.display="none";
         document.getElementById("app").style.display="block";
 
         if(!started){
-            started = true;
+            started=true;
             startSystem();
             startLogs();
-            startTextCycle();
         }
 
     } else {
-        msg.innerText = "❌ Wrong Password! Contact Mehedi Vai";
+
+        msg.innerText="❌ Wrong Password! Contact Admin";
+
         startAlarm();
+        vibrate();
+        flashScreen();
     }
 }
 
-/* 🔊 CONTINUOUS SIREN ALARM */
+/* 🔊 HACK STYLE ALARM */
 function startAlarm(){
 
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    const ctx = new AudioCtx();
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
 
-    alarmInterval = setInterval(()=>{
+    alarmInt=setInterval(()=>{
 
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
+        let o=ctx.createOscillator();
+        let g=ctx.createGain();
 
-        o.type = "sawtooth";
+        o.type="square";
+
+        let f=300+Math.random()*700;
+
+        o.frequency.setValueAtTime(f,ctx.currentTime);
+        o.frequency.exponentialRampToValueAtTime(f+300,ctx.currentTime+0.1);
+        o.frequency.exponentialRampToValueAtTime(f-200,ctx.currentTime+0.2);
+
+        g.gain.value=0.3;
+
         o.connect(g);
         g.connect(ctx.destination);
 
-        g.gain.value = 0.3;
-
-        o.frequency.setValueAtTime(500, ctx.currentTime);
-        o.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.2);
-        o.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.5);
-
         o.start();
-        o.stop(ctx.currentTime + 0.6);
+        o.stop(ctx.currentTime+0.25);
 
-    },650);
+    },180);
+}
+
+/* 📳 VIBRATION */
+function vibrate(){
+    if(navigator.vibrate){
+        navigator.vibrate([200,100,300,100,500,200,700]);
+    }
+}
+
+/* 🔴 FLASH SCREEN */
+function flashScreen(){
+
+    let f=document.getElementById("flash");
+
+    f.style.animation="none";
+    void f.offsetWidth;
+
+    f.style.animation="flashAnim 0.2s 10";
+
 }
 
 /* BIG SMALL */
 function random(){
-    return Math.random() < 0.5 ? "BIG" : "SMALL";
+    return Math.random()<0.5?"BIG":"SMALL";
 }
 
 /* SYSTEM */
 function startSystem(){
 
-    document.getElementById("result").innerText = random();
+    document.getElementById("result").innerText=random();
 
     setInterval(()=>{
 
         countdown--;
-        document.getElementById("timer").innerText = countdown;
+        document.getElementById("timer").innerText=countdown;
 
-        if(countdown <= 0){
-            countdown = 30;
-            document.getElementById("result").innerText = random();
+        if(countdown<=0){
+            countdown=30;
+            document.getElementById("result").innerText=random();
         }
 
     },1000);
 }
 
-/* LOGS */
+/* LOGS SMALL ROTATION */
 function startLogs(){
 
-    const logs = [
-        "System booting...",
-        "Security scanning...",
-        "AI engine active...",
-        "Network stable...",
-        "Encryption enabled...",
-        "Firewall running..."
+    const logs=[
+    "network stable...",
+    "security active...",
+    "system running...",
+    "ai engine online...",
+    "data sync..."
     ];
 
     setInterval(()=>{
 
-        document.getElementById("logs").innerText =
-        logs[Math.floor(Math.random() * logs.length)];
+        document.getElementById("logs").innerText=
+        logs[Math.floor(Math.random()*logs.length)];
 
-    },1200);
+    },900);
 }
 
-/* 7 COLOR TEXT CYCLE */
-function startTextCycle(){
-
-    const el = document.getElementById("animatedLine");
-
-    const texts = [
-        "💎 MEHEDI VAI BEST DEVELOPER BANGLADESH NO.1 💎",
-        "🔥 SYSTEM ONLINE 🔥",
-        "⚡ AI CORE ACTIVE ⚡",
-        "🔒 SECURITY ENABLED 🔒",
-        "🚀 ENGINE RUNNING 🚀",
-        "🌐 NETWORK OK 🌐",
-        "💠 PREMIUM MODE 💠"
-    ];
-
-    let i = 0;
-
-    setInterval(()=>{
-
-        el.style.opacity = 0;
-
-        setTimeout(()=>{
-
-            el.innerText = texts[i % texts.length];
-            i++;
-
-            el.style.opacity = 1;
-
-        },300);
-
-    },1200);
-}
+/* FLASH KEYFRAME */
+const style=document.createElement("style");
+style.innerHTML=`
+@keyframes flashAnim{
+0%{opacity:0}
+50%{opacity:0.8}
+100%{opacity:0}
+}`;
+document.head.appendChild(style);
 
 </script>
 
