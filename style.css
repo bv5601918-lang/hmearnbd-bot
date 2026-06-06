@@ -1,7 +1,7 @@
 body{
     margin:0;
     font-family:Arial;
-    background:#0a0a0a;
+    background:#111;
     color:white;
     text-align:center;
 }
@@ -16,10 +16,9 @@ body{
 
 input{
     padding:10px;
-    border-radius:8px;
-    border:none;
     width:200px;
     text-align:center;
+    border-radius:8px;
 }
 
 button{
@@ -27,8 +26,8 @@ button{
     padding:10px 20px;
     border:none;
     border-radius:8px;
-    cursor:pointer;
     background:#00ff88;
+    cursor:pointer;
 }
 
 #app{
@@ -37,12 +36,5 @@ button{
 }
 
 #value{
-    font-size:80px;
-    margin-top:40px;
-    text-shadow:0 0 15px #00ff88;
-}
-
-.btn{
-    margin-top:40px;
-    background:#0066ff;
+    font-size:70px;
 }
