@@ -13,6 +13,7 @@ body{
     font-family:Arial;
     background:#000814;
     color:white;
+    overflow:hidden;
 }
 
 /* LOGIN */
@@ -31,12 +32,6 @@ body{
     background:linear-gradient(90deg,#00f5d4,#fee440,#f15bb5,#00bbf9,#00f5d4);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
-    animation:glow 2s linear infinite;
-}
-
-@keyframes glow{
-    0%{background-position:0% 50%}
-    100%{background-position:100% 50%}
 }
 
 input{
@@ -44,22 +39,26 @@ input{
     max-width:320px;
     padding:15px;
     text-align:center;
+    border-radius:10px;
+    border:none;
 }
 
 button{
     width:80%;
     max-width:320px;
     padding:15px;
-    background:#0077b6;
-    color:white;
     border:none;
     border-radius:10px;
+    background:#0077b6;
+    color:white;
+    font-weight:bold;
 }
 
 /* ERROR */
 #message{
     text-align:center;
     font-weight:bold;
+    color:#ff4d6d;
 }
 
 /* APP */
@@ -69,62 +68,11 @@ button{
     padding:20px;
 }
 
-/* 7 COLOR TITLE */
+/* HEADER TEXT */
 #devText{
     font-size:22px;
     font-weight:900;
-    animation:colorSwap 3.5s infinite;
-}
-
-/* 7 COLOR ANIMATION */
-@keyframes colorSwap{
-
-0%{
-    color:#ff0000;
-    opacity:1;
-    transform:scale(1);
-}
-
-14%{
-    color:#ff9900;
-    opacity:0.2;
-    transform:scale(0.95);
-}
-
-28%{
-    color:#ffff00;
-    opacity:1;
-    transform:scale(1.05);
-}
-
-42%{
-    color:#00ff00;
-    opacity:0.3;
-    transform:scale(1);
-}
-
-56%{
-    color:#00ffff;
-    opacity:1;
-    transform:scale(1.1);
-}
-
-70%{
-    color:#0000ff;
-    opacity:0.4;
-    transform:scale(0.95);
-}
-
-84%{
-    color:#ff00ff;
-    opacity:1;
-    transform:scale(1);
-}
-
-100%{
-    color:#ff0000;
-    opacity:0.2;
-}
+    margin-top:10px;
 }
 
 /* BIG SMALL */
@@ -137,6 +85,14 @@ button{
 #timer{
     font-size:60px;
     color:#ffd60a;
+    font-weight:900;
+}
+
+/* LIVE TEXT */
+#animatedLine{
+    margin-top:15px;
+    font-weight:bold;
+    transition:0.3s;
 }
 
 /* LOGS */
@@ -148,19 +104,6 @@ button{
     color:#00ff99;
     border:1px solid #00ff99;
     padding:10px;
-}
-
-/* ANIM TEXT LINE */
-#animatedLine{
-    margin-top:15px;
-    font-weight:bold;
-    animation:fadeMove 1.5s infinite;
-}
-
-@keyframes fadeMove{
-    0%{opacity:0; transform:translateY(10px)}
-    50%{opacity:1}
-    100%{opacity:0; transform:translateY(-10px)}
 }
 </style>
 </head>
@@ -183,15 +126,13 @@ button{
 <!-- APP -->
 <div id="app">
 
-    <div id="devText">
-        🔥 MEHEDI VAI BEST DEVELOPER BANGLADESH NO.1 🔥
-    </div>
+    <div id="devText">🔥 MEHEDI VAI BEST DEVELOPER BANGLADESH NO.1 🔥</div>
 
     <div id="result">---</div>
 
     <div id="timer">30</div>
 
-    <div id="animatedLine" id="textCycle"></div>
+    <div id="animatedLine"></div>
 
     <div id="logs"></div>
 
@@ -201,111 +142,100 @@ button{
 
 const PASSWORD = "MEHEDIVAI115";
 
+let countdown = 30;
+let started = false;
 let alarmInterval;
-let logsInterval;
-let textInterval;
 
 /* LOGIN */
 function login(){
 
-    let pass=document.getElementById("password").value;
-    let msg=document.getElementById("message");
+    let pass = document.getElementById("password").value;
+    let msg = document.getElementById("message");
 
-    if(pass===PASSWORD){
+    if(pass === PASSWORD){
 
         document.getElementById("loginBox").style.display="none";
         document.getElementById("app").style.display="block";
 
-        startSystem();
-        startLogs();
-        startTextCycle();
+        if(!started){
+            started = true;
+            startSystem();
+            startLogs();
+            startTextCycle();
+        }
 
-    }else{
-
-        msg.innerText="❌ Wrong Password! Contact Admin";
-
-        startAlarm(); // LOOP SOUND
+    } else {
+        msg.innerText = "❌ Wrong Password! Contact Mehedi Vai";
+        startAlarm();
     }
 }
 
-/* 🔊 CONTINUOUS ALARM */
+/* 🔊 CONTINUOUS SIREN ALARM */
 function startAlarm(){
 
-    let ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AudioCtx();
 
     alarmInterval = setInterval(()=>{
 
-        let o = ctx.createOscillator();
-        let g = ctx.createGain();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
 
-        o.type="sawtooth";
-        o.frequency.value=600;
-
+        o.type = "sawtooth";
         o.connect(g);
         g.connect(ctx.destination);
 
+        g.gain.value = 0.3;
+
+        o.frequency.setValueAtTime(500, ctx.currentTime);
+        o.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.2);
+        o.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.5);
+
         o.start();
+        o.stop(ctx.currentTime + 0.6);
 
-        setTimeout(()=>o.frequency.value=900,200);
-        setTimeout(()=>o.frequency.value=400,400);
-
-        setTimeout(()=>{
-            o.stop();
-        },600);
-
-    },700);
-
+    },650);
 }
 
-/* STOP LOGIC IF NEEDED */
-function stopAlarm(){
-    clearInterval(alarmInterval);
-}
-
-/* RANDOM BIG SMALL */
+/* BIG SMALL */
 function random(){
-    return Math.random()<0.5?"BIG":"SMALL";
+    return Math.random() < 0.5 ? "BIG" : "SMALL";
 }
 
 /* SYSTEM */
 function startSystem(){
 
-    document.getElementById("result").innerText=random();
+    document.getElementById("result").innerText = random();
 
     setInterval(()=>{
 
-        let t=document.getElementById("timer");
-        t.innerText = (t.innerText-1);
+        countdown--;
+        document.getElementById("timer").innerText = countdown;
 
-        if(t.innerText<=0){
-            t.innerText=30;
-            document.getElementById("result").innerText=random();
+        if(countdown <= 0){
+            countdown = 30;
+            document.getElementById("result").innerText = random();
         }
 
     },1000);
 }
 
-/* LOGS FIX (NO REPEAT SAME LINE) */
+/* LOGS */
 function startLogs(){
 
-    const logs=[
-    "System boot...",
-    "Security scan...",
-    "AI module active...",
-    "Network stable...",
-    "Encryption ON...",
-    "Data sync...",
-    "Firewall enabled..."
+    const logs = [
+        "System booting...",
+        "Security scanning...",
+        "AI engine active...",
+        "Network stable...",
+        "Encryption enabled...",
+        "Firewall running..."
     ];
 
-    let i=0;
+    setInterval(()=>{
 
-    logsInterval=setInterval(()=>{
-
-        document.getElementById("logs").innerText=
-        logs[Math.floor(Math.random()*logs.length)];
-
-        i++;
+        document.getElementById("logs").innerText =
+        logs[Math.floor(Math.random() * logs.length)];
 
     },1200);
 }
@@ -313,30 +243,37 @@ function startLogs(){
 /* 7 COLOR TEXT CYCLE */
 function startTextCycle(){
 
-    const text=document.getElementById("animatedLine");
+    const el = document.getElementById("animatedLine");
 
-    const lines=[
-        "💎 MEHEDI SYSTEM ONLINE 💎",
-        "🔥 AI CORE ACTIVE 🔥",
-        "⚡ SECURITY LEVEL HIGH ⚡",
-        "💠 SYSTEM RUNNING 💠",
-        "🚀 PERFORMANCE BOOST 🚀",
-        "🔒 ENCRYPTION ENABLED 🔒",
-        "🌐 NETWORK STABLE 🌐"
+    const texts = [
+        "💎 MEHEDI VAI BEST DEVELOPER BANGLADESH NO.1 💎",
+        "🔥 SYSTEM ONLINE 🔥",
+        "⚡ AI CORE ACTIVE ⚡",
+        "🔒 SECURITY ENABLED 🔒",
+        "🚀 ENGINE RUNNING 🚀",
+        "🌐 NETWORK OK 🌐",
+        "💠 PREMIUM MODE 💠"
     ];
 
-    let i=0;
+    let i = 0;
 
-    textInterval=setInterval(()=>{
+    setInterval(()=>{
 
-        text.innerText=lines[i%lines.length];
-        i++;
+        el.style.opacity = 0;
 
-    },1000);
+        setTimeout(()=>{
 
+            el.innerText = texts[i % texts.length];
+            i++;
+
+            el.style.opacity = 1;
+
+        },300);
+
+    },1200);
 }
 
 </script>
 
 </body>
-        </html>
+</html>
