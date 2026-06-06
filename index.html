@@ -13,19 +13,6 @@ body{
     font-family:Arial;
     background:#000814;
     color:white;
-    overflow:hidden;
-}
-
-/* RED FLASH SCREEN */
-.flash{
-    position:fixed;
-    top:0;left:0;
-    width:100%;
-    height:100%;
-    background:red;
-    opacity:0;
-    pointer-events:none;
-    animation:none;
 }
 
 /* LOGIN */
@@ -67,6 +54,11 @@ button{
     font-weight:bold;
 }
 
+#msg{
+    color:#ff4d6d;
+    text-align:center;
+}
+
 /* APP */
 #app{
     display:none;
@@ -79,18 +71,11 @@ button{
     font-size:20px;
     font-weight:900;
     margin-top:10px;
-    animation:glow 2s linear infinite;
-}
-
-@keyframes glow{
-    0%{opacity:1}
-    50%{opacity:0.4}
-    100%{opacity:1}
 }
 
 /* BIG SMALL */
 #result{
-    font-size:110px;
+    font-size:120px;
     font-weight:900;
 }
 
@@ -101,22 +86,34 @@ button{
     font-weight:900;
 }
 
-/* LOG BOX */
+/* AUTO TEXT BOX */
 #logs{
     margin-top:20px;
     height:120px;
     border:1px solid #00ff99;
     padding:10px;
-    font-size:12px;
+    font-size:13px;
     color:#00ff99;
     overflow:hidden;
+    transition:0.3s;
+}
+
+/* FLASH */
+#flash{
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background:red;
+    opacity:0;
+    pointer-events:none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="flash" id="flash"></div>
+<div id="flash"></div>
 
 <!-- LOGIN -->
 <div id="loginBox">
@@ -134,7 +131,7 @@ button{
 <!-- APP -->
 <div id="app">
 
-    <div id="devText">MEHEDI VAI TOP COMMUNITY BIG BOSS NO.1 DEVELOPER BANGLADESH</div>
+    <div id="devText">🔥 MEHEDI VAI SYSTEM ONLINE 🔥</div>
 
     <div id="result">---</div>
 
@@ -147,9 +144,10 @@ button{
 <script>
 
 const PASSWORD="MEHEDIVAI115";
+
 let countdown=30;
 let started=false;
-let alarmInt;
+let alarmInterval;
 
 /* LOGIN */
 function login(){
@@ -178,12 +176,12 @@ function login(){
     }
 }
 
-/* 🔊 HACK STYLE ALARM */
+/* 🔊 SIREN ALARM LOOP */
 function startAlarm(){
 
     const ctx=new (window.AudioContext||window.webkitAudioContext)();
 
-    alarmInt=setInterval(()=>{
+    alarmInterval=setInterval(()=>{
 
         let o=ctx.createOscillator();
         let g=ctx.createGain();
@@ -219,10 +217,15 @@ function flashScreen(){
 
     let f=document.getElementById("flash");
 
-    f.style.animation="none";
-    void f.offsetWidth;
+    setInterval(()=>{
 
-    f.style.animation="flashAnim 0.2s 10";
+        f.style.opacity=1;
+
+        setTimeout(()=>{
+            f.style.opacity=0;
+        },120);
+
+    },400);
 
 }
 
@@ -249,34 +252,38 @@ function startSystem(){
     },1000);
 }
 
-/* LOGS SMALL ROTATION */
+/* 📡 AUTO TEXT BOX (YOUR REQUEST FIXED) */
 function startLogs(){
 
-    const logs=[
-    "network stable...",
-    "security active...",
-    "system running...",
-    "ai engine online...",
-    "data sync..."
+    const box=document.getElementById("logs");
+
+    const texts=[
+        "NETWORK STABLE...",
+        "DATA SCIENCE MODE ACTIVE...",
+        "AI SYSTEM RUNNING...",
+        "SECURITY CHECKING...",
+        "SERVER CONNECTED...",
+        "SYSTEM OPTIMIZED...",
+        "MEHEDI VAI TOP COMMUNITY BANGLADESH NO.1"
     ];
+
+    let i=0;
 
     setInterval(()=>{
 
-        document.getElementById("logs").innerText=
-        logs[Math.floor(Math.random()*logs.length)];
+        box.style.opacity=0;
 
-    },900);
+        setTimeout(()=>{
+
+            box.innerText=texts[i%texts.length];
+            i++;
+
+            box.style.opacity=1;
+
+        },200);
+
+    },1200);
 }
-
-/* FLASH KEYFRAME */
-const style=document.createElement("style");
-style.innerHTML=`
-@keyframes flashAnim{
-0%{opacity:0}
-50%{opacity:0.8}
-100%{opacity:0}
-}`;
-document.head.appendChild(style);
 
 </script>
 
