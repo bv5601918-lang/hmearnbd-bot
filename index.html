@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MEHEDI BOSS AI SYSTEM PRO</title>
+<title>RAJ RTB AI SYSTEM PRO</title>
 
 <style>
 *{box-sizing:border-box}
@@ -16,7 +16,6 @@ body{
     overflow:hidden;
 }
 
-/* RED FLASH SCREEN */
 .flash{
     position:fixed;
     top:0;left:0;
@@ -25,7 +24,6 @@ body{
     background:red;
     opacity:0;
     pointer-events:none;
-    animation:none;
 }
 
 /* LOGIN */
@@ -47,7 +45,7 @@ body{
     -webkit-text-fill-color:transparent;
 }
 
-input{
+input,button{
     width:80%;
     max-width:320px;
     padding:15px;
@@ -57,11 +55,6 @@ input{
 }
 
 button{
-    width:80%;
-    max-width:320px;
-    padding:15px;
-    border:none;
-    border-radius:10px;
     background:#0077b6;
     color:white;
     font-weight:bold;
@@ -74,12 +67,10 @@ button{
     padding:20px;
 }
 
-/* HEADER */
 #devText{
-    font-size:20px;
+    font-size:18px;
     font-weight:900;
-    margin-top:10px;
-    animation:glow 2s linear infinite;
+    animation:glow 2s infinite;
 }
 
 @keyframes glow{
@@ -88,20 +79,24 @@ button{
     100%{opacity:1}
 }
 
-/* BIG SMALL */
 #result{
-    font-size:110px;
+    font-size:45px;
     font-weight:900;
+    margin-top:20px;
 }
 
-/* TIMER */
+#nums{
+    font-size:30px;
+    margin-top:10px;
+    color:#00ff99;
+}
+
 #timer{
     font-size:55px;
     color:#ffd60a;
     font-weight:900;
 }
 
-/* LOG BOX */
 #logs{
     margin-top:20px;
     height:120px;
@@ -109,7 +104,6 @@ button{
     padding:10px;
     font-size:12px;
     color:#00ff99;
-    overflow:hidden;
 }
 </style>
 </head>
@@ -121,7 +115,7 @@ button{
 <!-- LOGIN -->
 <div id="loginBox">
 
-    <div id="title">MEHEDI BOSS AI SYSTEM PRO</div>
+    <div id="title">RAJ RTB AI SYSTEM</div>
 
     <input id="password" type="password" placeholder="Enter Password">
 
@@ -134,9 +128,10 @@ button{
 <!-- APP -->
 <div id="app">
 
-    <div id="devText">MEHEDI VAI TOP COMMUNITY BIG BOSS NO.1 DEVELOPER BANGLADESH</div>
+    <div id="devText">RAJ RTB AI SYSTEM ACTIVE</div>
 
     <div id="result">---</div>
+    <div id="nums"></div>
 
     <div id="timer">30</div>
 
@@ -146,10 +141,11 @@ button{
 
 <script>
 
-const PASSWORD="MEHEDIVAI115";
+const PASSWORD="rdraj00";
+
 let countdown=30;
 let started=false;
-let alarmInt;
+let lastType="";
 
 /* LOGIN */
 function login(){
@@ -169,72 +165,31 @@ function login(){
         }
 
     } else {
-
-        msg.innerText="❌ Wrong Password! Contact Admin";
-
-        startAlarm();
-        vibrate();
-        flashScreen();
+        msg.innerText="❌ Wrong Password!";
     }
 }
 
-/* 🔊 HACK STYLE ALARM */
-function startAlarm(){
-
-    const ctx=new (window.AudioContext||window.webkitAudioContext)();
-
-    alarmInt=setInterval(()=>{
-
-        let o=ctx.createOscillator();
-        let g=ctx.createGain();
-
-        o.type="square";
-
-        let f=300+Math.random()*700;
-
-        o.frequency.setValueAtTime(f,ctx.currentTime);
-        o.frequency.exponentialRampToValueAtTime(f+300,ctx.currentTime+0.1);
-        o.frequency.exponentialRampToValueAtTime(f-200,ctx.currentTime+0.2);
-
-        g.gain.value=0.3;
-
-        o.connect(g);
-        g.connect(ctx.destination);
-
-        o.start();
-        o.stop(ctx.currentTime+0.25);
-
-    },180);
-}
-
-/* 📳 VIBRATION */
-function vibrate(){
-    if(navigator.vibrate){
-        navigator.vibrate([200,100,300,100,500,200,700]);
-    }
-}
-
-/* 🔴 FLASH SCREEN */
-function flashScreen(){
-
-    let f=document.getElementById("flash");
-
-    f.style.animation="none";
-    void f.offsetWidth;
-
-    f.style.animation="flashAnim 0.2s 10";
-
-}
-
-/* BIG SMALL */
-function random(){
+/* RANDOM TYPE */
+function getType(){
     return Math.random()<0.5?"BIG":"SMALL";
+}
+
+/* UNIQUE RANDOM NUMBERS */
+function getNumbers(type){
+
+    let arr = type==="BIG"
+        ? [6,7,8,9]
+        : [0,1,2,3,4];
+
+    arr = arr.sort(()=>Math.random()-0.5);
+
+    return arr.slice(0,3);
 }
 
 /* SYSTEM */
 function startSystem(){
 
-    document.getElementById("result").innerText=random();
+    update();
 
     setInterval(()=>{
 
@@ -243,13 +198,31 @@ function startSystem(){
 
         if(countdown<=0){
             countdown=30;
-            document.getElementById("result").innerText=random();
+            update();
         }
 
     },1000);
 }
 
-/* LOGS SMALL ROTATION */
+/* UPDATE RESULT */
+function update(){
+
+    let type=getType();
+
+    // prevent same repeat
+    if(type===lastType){
+        type = type==="BIG"?"SMALL":"BIG";
+    }
+
+    lastType=type;
+
+    let nums=getNumbers(type);
+
+    document.getElementById("result").innerText=type;
+    document.getElementById("nums").innerText=nums.join("  ");
+}
+
+/* LOGS */
 function startLogs(){
 
     const logs=[
@@ -268,17 +241,7 @@ function startLogs(){
     },900);
 }
 
-/* FLASH KEYFRAME */
-const style=document.createElement("style");
-style.innerHTML=`
-@keyframes flashAnim{
-0%{opacity:0}
-50%{opacity:0.8}
-100%{opacity:0}
-}`;
-document.head.appendChild(style);
-
 </script>
 
 </body>
-</html>MEHEDIVAIBOSS💥✅
+</html>
