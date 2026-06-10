@@ -20,7 +20,6 @@ body{
     background-repeat: no-repeat;
 }
 
-/* overlay dark effect (optional but makes text readable) */
 body::before{
     content:"";
     position:fixed;
@@ -82,6 +81,41 @@ button{
     padding:20px;
 }
 
+/* MENU BUTTONS */
+#menu{
+    margin-top:20px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    align-items:center;
+}
+
+#menu button{
+    width:80%;
+    max-width:300px;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#aiBtn{
+    background:#00bbf9;
+    color:white;
+}
+
+#webBtn{
+    background:#fee440;
+    color:black;
+}
+
+/* AI BOX */
+#aiBox{
+    display:none;
+}
+
 #devText{
     font-size:18px;
     font-weight:900;
@@ -120,6 +154,21 @@ button{
     font-size:12px;
     color:#00ff99;
 }
+
+/* WEBSITE VIEW */
+#siteBox{
+    display:none;
+    width:100%;
+    height:80vh;
+    margin-top:10px;
+}
+
+iframe{
+    width:100%;
+    height:100%;
+    border:none;
+    border-radius:10px;
+}
 </style>
 </head>
 
@@ -143,14 +192,32 @@ button{
 <!-- APP -->
 <div id="app">
 
-    <div id="devText">RAJ RTB AI SYSTEM ACTIVE</div>
+    <div id="menu">
 
-    <div id="result">---</div>
-    <div id="nums"></div>
+        <button id="aiBtn" onclick="showAI()">🤖 AI SYSTEM</button>
 
-    <div id="timer">30</div>
+        <button id="webBtn" onclick="showSite()">🌐 WEBSITE</button>
 
-    <div id="logs"></div>
+    </div>
+
+    <!-- AI SECTION -->
+    <div id="aiBox">
+
+        <div id="devText">RAJ RTB AI SYSTEM ACTIVE</div>
+
+        <div id="result">---</div>
+        <div id="nums"></div>
+
+        <div id="timer">30</div>
+
+        <div id="logs"></div>
+
+    </div>
+
+    <!-- WEBSITE SECTION -->
+    <div id="siteBox">
+        <iframe src="https://hgnice.bet/#/register?invitationCode=531211974484"></iframe>
+    </div>
 
 </div>
 
@@ -173,6 +240,8 @@ function login(){
         document.getElementById("loginBox").style.display="none";
         document.getElementById("app").style.display="block";
 
+        showAI(); // default open AI
+
         if(!started){
             started=true;
             startSystem();
@@ -180,16 +249,31 @@ function login(){
         }
 
     } else {
-        msg.innerText="❌ রাজ এর নানির খালি ঘর!";
+        msg.innerText="❌ Wrong Password";
     }
 }
 
-/* RANDOM TYPE */
+/* SHOW AI */
+function showAI(){
+
+    document.getElementById("aiBox").style.display="block";
+    document.getElementById("siteBox").style.display="none";
+
+}
+
+/* SHOW SITE */
+function showSite(){
+
+    document.getElementById("aiBox").style.display="none";
+    document.getElementById("siteBox").style.display="block";
+
+}
+
+/* SYSTEM */
 function getType(){
     return Math.random()<0.5?"BIG":"SMALL";
 }
 
-/* UNIQUE RANDOM NUMBERS */
 function getNumbers(type){
 
     let arr = type==="BIG"
@@ -201,7 +285,6 @@ function getNumbers(type){
     return arr.slice(0,3);
 }
 
-/* SYSTEM */
 function startSystem(){
 
     update();
@@ -219,12 +302,10 @@ function startSystem(){
     },1000);
 }
 
-/* UPDATE RESULT */
 function update(){
 
     let type=getType();
 
-    // prevent same repeat
     if(type===lastType){
         type = type==="BIG"?"SMALL":"BIG";
     }
