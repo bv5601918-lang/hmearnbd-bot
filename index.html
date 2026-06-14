@@ -359,7 +359,7 @@ body::before{
 </div>
 
 <script>
-const PASSWORD = "rdraj001";
+const PASSWORD = "@";
 let countdown=30, started=false, lastType="", history=[];
 
 /* ── Period নাম্বার: hgnice এর সাথে EXACT মিল ──
@@ -428,7 +428,7 @@ function fwLogin(){
         document.getElementById("fw-aiSection").style.display="block";
         if(!started){ started=true; startSystem(); }
     } else {
-        msg.innerText="❌ পাসওয়ার্ড ভুল!";
+        msg.innerText="❌ তোর মেহেদী বাপের কাছে পাসওয়ার্ড নেই শালা!";
     }
 }
 document.getElementById("fw-password").addEventListener("keydown",e=>{if(e.key==="Enter")fwLogin();});
